@@ -6,8 +6,49 @@
         <title>Bate-Papo UOL</title>
         <link rel="stylesheet" href="assets/css/style.css">
         <script defer src="assets/js/script.js"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     </head>
     <body>
-        
+        <div class="input-screen flex column none">
+            <img src="assets/media/logo 2.png" alt="Logo UOL">
+            <input type="text" placeholder="Digite seu nome">
+            <button onclick="enter()">Entrar</button>
+        </div>
+        <div class="main-screen">
+            <header class="flex space-between">
+                <img src="assets/media/logo 1.png" alt="Logo UOL">
+                <img src="assets/media/peopleIcon.png" alt="People icon">
+            </header>
+            <main>
+    
+            </main>
+            <div class="input-message flex space-between">
+                <input type="text" placeholder="Escreva aqui...">
+                <img src="assets/media/airplaneIcon.png" alt="Airplane icon">
+            </div>
+            <div class="menu">
+                <h2 class="title-contacts flex">
+                    Escolha um contato<br>para enviar mensagem:
+                </h2>
+                <nav class="options">
+                    <ul>
+                        <li class="flex flex-start"><img src="assets/media/smallPeopleIcon.png" alt="">Todos</li>
+                        <li class="flex flex-start"><img src="assets/media/userIcon.png" alt="">João</li>
+                        <li class="flex flex-start"><img src="assets/media/userIcon.png" alt="">Maria</li>
+                    </ul>
+                </nav>
+                <h2 class="title-visibility flex">
+                    Escolha a visibilidade:
+                </h2>
+                <nav class="options">
+                    <ul>
+                        <li class="flex flex-start"><img src="assets/media/publicIcon.png" alt="">Todos</li>
+                        <li class="flex flex-start"><img src="assets/media/privateIcon.png" alt="">Todos</li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </body>
 </html>

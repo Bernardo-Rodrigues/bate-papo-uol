@@ -1,0 +1,151 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    width: 375px;
+    margin: 0 auto;
+
+    font-family: 'Roboto', sans-serif;
+}
+ul{
+    list-style: none;
+}
+.input-screen{
+    height: 100vh;
+    justify-content: flex-start;
+}
+.input-screen img{
+    margin-top: 72px;
+
+}
+.input-screen input{
+    margin-top: 94px;
+
+    background: #FFFFFF;
+    border: 1px solid #D7D7D7;
+    border-radius: 4px;
+
+    text-align: center;
+    color: #AEAEAE;
+
+    height: 54px;
+    width: 261px;
+
+    outline: 0;
+}
+.input-screen input::placeholder{
+    font-size: 18px;
+    line-height: 25px;
+    color: #AEAEAE;
+    
+}
+.input-screen button{
+    margin-top: 94px;
+
+    width: 109px;
+    height: 45px;   
+    
+    color: #696969;
+    font-size: 18px;
+    line-height: 25px;
+
+    background: #E7E7E7;
+    border-radius: 9px;
+    border: 0;
+}
+.main-screen{
+    height: 100vh;
+
+    position: relative;
+}
+header{
+    justify-content: space-between;
+
+    height: 80px;
+
+    padding: 0 22px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+}
+main{
+    background-color: #E5E5E5;
+
+    height: calc(100vh - 160px);
+    
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+}
+.input-message{
+    position: fixed;
+    bottom: 0;
+
+    width: 375px;
+    height: 80px;
+
+    padding: 0 17px;
+
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+}
+.input-message input{
+    border: 0;
+    outline: 0;
+}
+.input-message input::placeholder{
+    font-size: 18px;
+    line-height: 21px;
+    color: #000000;
+    font-style: italic;
+}
+.menu{
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    background: #fff;
+    height: 100vh;
+    width: 260px;
+}
+.menu .title-contacts,
+.menu .title-visibility{
+    text-align: center;
+    font-size: 16px;
+    line-height: 19px;
+    font-weight: bold;
+    
+    height: 84px;
+}
+.menu .title-visibility{
+    height: 66px;
+}
+.options li{
+    height: 36px;
+    align-content: center;
+}
+.options li img{
+    padding: 0 10px 0 20px;
+}
+
+
+
+input:focus::-webkit-input-placeholder{
+    color: transparent;
+}
+.flex{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.column{
+    flex-direction: column;
+}
+.space-between{
+    justify-content: space-between;
+}
+.flex-start{
+    justify-content: flex-start;
+}
+.none{
+    display: none;
+}
+
+
