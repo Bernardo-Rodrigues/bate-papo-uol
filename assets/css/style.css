@@ -8,13 +8,25 @@ body{
     margin: 0 auto;
 
     font-family: 'Roboto', sans-serif;
+    overflow-y: scroll;
 }
 ul{
     list-style: none;
 }
+
+
+
+
+
+
+
+
+
 .input-screen{
     height: 100vh;
     justify-content: flex-start;
+
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
 }
 .input-screen img{
     margin-top: 72px;
@@ -50,28 +62,58 @@ ul{
     color: #696969;
     font-size: 18px;
     line-height: 25px;
+    cursor: pointer;
 
     background: #E7E7E7;
     border-radius: 9px;
     border: 0;
 }
+
+
+
+
+
+
+
+
+
+
 .main-screen{
     height: 100vh;
 
     position: relative;
+    display: flex;
+
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 header{
     justify-content: space-between;
 
+    position: fixed;
+    top: 0;
+    z-index: 1;
+
     height: 80px;
+    width: 375px;
 
     padding: 0 22px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+}
+header img{
+    cursor: pointer;
 }
 main{
     background-color: #E5E5E5;
 
-    height: calc(100vh - 160px);
+    position: fixed;
+    top: 0;
+    width: 375px;
+    height: 100%;
+
+    overflow-y: scroll;
+    padding: 80px 0;
     
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
 }
@@ -85,10 +127,13 @@ main{
     padding: 0 17px;
 
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
 }
 .input-message input{
     border: 0;
     outline: 0;
+
+    height: 60px;
 }
 .input-message input::placeholder{
     font-size: 18px;
@@ -96,13 +141,25 @@ main{
     color: #000000;
     font-style: italic;
 }
-.menu{
-    position: absolute;
-    top: 0;
-    right: 0;
+.input-message img{
+    cursor: pointer;
+}
 
+
+
+
+
+.menu-screen{
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 2;
+
+    display: flex;
+}
+.menu{
     background: #fff;
-    height: 100vh;
+
     width: 260px;
 }
 .menu .title-contacts,
@@ -120,10 +177,22 @@ main{
 .options li{
     height: 36px;
     align-content: center;
+
+    cursor: pointer;
 }
 .options li img{
     padding: 0 10px 0 20px;
 }
+.show-menu{
+    transform: translateX(-260px);
+}
+.transparent-dark{
+    cursor: pointer;
+    width: 115px;
+    
+    background: rgba(0, 0, 0, 0.6);
+}
+
 
 
 
@@ -147,5 +216,3 @@ input:focus::-webkit-input-placeholder{
 .none{
     display: none;
 }
-
-
