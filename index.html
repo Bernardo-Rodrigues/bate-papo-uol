@@ -5,70 +5,93 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Bate-Papo UOL</title>
         <link rel="stylesheet" href="assets/css/style.css">
+        <script defer src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script defer src="assets/js/script.js"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     </head>
     <body>
-        <div class="input-screen flex column ">
-            <img src="assets/media/logo 2.png" alt="Logo UOL">
-            <input type="text" placeholder="Digite seu nome">
-            <button onclick="enter()">Entrar</button>
+        <div class="input-screen">
+            <img src="./assets/media/logo 2.png" alt="Logo UOL">
+            <div class="input-login flex column">
+                <input class="username" type="text" placeholder="Digite seu nome" data-identifier="enter-name">
+                <button onclick="enter()" data-identifier="start">Entrar</button>
+            </div>
+            <div class="loading none">
+                <div class="c-loader"></div>
+                <p>Entrando...</p>
+            </div>
+            
         </div>
         <div class="main-screen none">
             <div class="container">
                 <header class="flex space-between">
-                    <img src="assets/media/logo 1.png" alt="Logo UOL" onclick="window.location.reload()">
-                    <img src="assets/media/peopleIcon.png" alt="People icon" onclick="toggleMenu()">
+                    <img src="./assets/media/logo 1.png" alt="Logo UOL" onclick="window.location.reload()">
+                    <img src="./assets/media/peopleIcon.png" alt="People icon" onclick="toggleMenu()">
                 </header>
-                <main>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent at accumsan risus, et malesuada tellus. Nullam at feugiat lorem, ut dictum felis. Nullam commodo et augue nec convallis. Ut nunc libero, auctor vitae risus eu, malesuada ultricies metus. Fusce ultricies efficitur nibh, vitae posuere neque sagittis a. Morbi auctor ac justo ac fringilla. Curabitur tempus imperdiet nisl, egestas volutpat tellus luctus vel. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Donec sed volutpat massa. Cras pellentesque gravida quam eu aliquam. Vestibulum posuere, ipsum finibus porta malesuada, dolor elit varius odio, at luctus est mauris sed nunc. Cras scelerisque eget dui a mattis. Quisque vestibulum ultricies lobortis. Curabitur volutpat vulputate ex, id scelerisque enim ornare vel. Suspendisse gravida et ligula vitae elementum. Nunc a sapien pulvinar, tincidunt felis eget, blandit ipsum.
-
-Praesent leo neque, placerat eu ligula non, placerat aliquet arcu. Donec eget convallis arcu. Mauris posuere, magna eu luctus volutpat, purus elit ullamcorper diam, eu aliquam lorem libero ac justo. Vivamus vel gravida quam. Curabitur varius elit ut sagittis pretium. Integer a fermentum tortor, et rhoncus mauris. Nunc hendrerit nibh non molestie sollicitudin. Phasellus a nunc condimentum, laoreet ipsum ut, ullamcorper magna. Nam eget elementum neque, ac lacinia nisi. Sed eu eleifend nibh. Praesent nec dolor mattis mi tempor tincidunt eu eu sapien. Maecenas feugiat tincidunt elementum.
-
-Pellentesque justo nulla, ornare ut pharetra a, porttitor vel ligula. Praesent maximus posuere nisl, vitae sollicitudin nulla pharetra et. Proin vitae eros elit. Praesent sed enim massa. Pellentesque porta ipsum eros, gravida semper tellus vestibulum non. Nam id magna orci. Morbi rhoncus maximus quam, quis porta augue rhoncus ac. Quisque diam nisl, facilisis nec vehicula nec, dignissim nec nisi. Integer consequat risus quis ipsum pulvinar, sit amet placerat sapien efficitur. Etiam porta felis vitae tempor finibus. Nam nec commodo leo. Nunc vitae dui libero. Cras sit amet vulputate mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Pellentesque rutrum id dolor quis elementum. Nullam malesuada eget metus at lacinia.
-
-Phasellus elit sapien, tristique sit amet mattis ac, accumsan quis lorem. Praesent a vestibulum metus, a commodo odio. Maecenas id turpis a magna ultricies rutrum vel in dolor. Quisque vulputate at arcu sit amet dignissim. Phasellus interdum diam massa, a sodales est semper quis. Sed augue neque, fringilla commodo tortor sed, pretium facilisis augue. Morbi at eros nulla.
-
-Aenean quis mi id nibh blandit volutpat eu sodales diam. Nam semper arcu at mi scelerisque rhoncus. In lobortis ac urna vitae scelerisque. Ut hendrerit nulla ipsum, non dignissim est ornare at. Sed ut ex arcu. Fusce posuere quis lorem et cursus. Integer euismod ornare nisi a dictum. Sed porttitor arcu vitae leo pharetra molestie. Aenean gravida velit quis lacus ultrices, eu suscipit mauris ultrices. Vivamus odio nisi, finibus in laoreet at, vulputate interdum elit. Morbi pellentesque eu ante sed pellentesque. Suspendisse potenti. Nunc scelerisque orci eu sapien molestie, non pulvinar tellus dapibus. Duis dignissim, risus quis feugiat lacinia, lorem elit viverra velit, vel scelerisque tellus
-                </main>
+                <div class="content">
+                    <main class="chat">
+                        
+                    </main>
+                    <div class="transparent-dark none" onclick="toggleMenu()"></div>
+                </div>
                 <div class="input-message flex space-between">
                     <input type="text" placeholder="Escreva aqui...">
-                    <img src="assets/media/airplaneIcon.png" alt="Airplane icon">
+                    <img src="./assets/media/airplaneIcon.png" alt="Airplane icon" onclick="sendMessage()" data-identifier="send-message">
                 </div>
-                
             </div>
-            <div class="menu-screen none">
-                    <div class="transparent-dark" onclick="toggleMenu()"></div>
-                    <div class="menu">
-                        <h2 class="title-contacts flex">
-                            Escolha um contato<br>para enviar mensagem:
-                        </h2>
-                        <nav class="options">
-                            <ul>
-                                <li class="flex flex-start" onclick="">
-                                    <img src="assets/media/smallPeopleIcon.png" alt="">Todos</li>
-                                <li class="flex flex-start" onclick="">
-                                    <img src="assets/media/userIcon.png" alt="">João</li>
-                                <li class="flex flex-start" onclick="">
-                                    <img src="assets/media/userIcon.png" alt="">Maria</li>
-                            </ul>
-                        </nav>
-                        <h2 class="title-visibility flex">
-                            Escolha a visibilidade:
-                        </h2>
-                        <nav class="options">
-                            <ul>
-                                <li class="flex flex-start" onclick="">
-                                    <img src="assets/media/publicIcon.png" alt="">Público
-                                </li>
-                                <li class="flex flex-start" onclick="">
-                                    <img src="assets/media/privateIcon.png" alt="">Reservadamente
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
+            <div class="menu none">
+                    <h2 class="title-contacts flex">
+                        Escolha um contato<br>para enviar mensagem:
+                    </h2>
+                    <nav class="options contacts">
+                        <ul>
+                            <li class="flex space-between check" onclick="changeContact(this)">
+                                <div class="option">
+                                    <img src="./assets/media/smallPeopleIcon.png" alt="">
+                                    Todos
+                                </div>
+                                <div>
+                                    <img src="./assets/media/checkIcon.png" alt="Check icon">
+                                </div>
+                            </li>
+                            <li class="flex space-between" onclick="changeContact(this)">
+                                <div class="option">
+                                    <img src="./assets/media/userIcon.png" alt="User icon" data-identifier="participant">
+                                    João
+                                </div>
+                            </li>
+                            <li class="flex space-between" onclick="changeContact(this)">
+                                <div class="option">
+                                    <img src="./assets/media/userIcon.png" alt="User icon" data-identifier="participant">
+                                    Maria
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
+                    <h2 class="title-visibility flex">
+                        Escolha a visibilidade:
+                    </h2>
+                    <nav class="options visibility">
+                        <ul>
+                            <li class="flex space-between check" onclick="changeVisibility(this)">
+                                <div class="option">
+                                    <img src="./assets/media/publicIcon.png" alt="Public icon" data-identifier="visibility">
+                                    Público
+                                </div>
+                                <div>
+                                    <img class="check" src="./assets/media/checkIcon.png" alt="Check icon">
+                                </div>
+                            </li>
+                            <li class="flex space-between" onclick="changeVisibility(this)">
+                                <div class="option">
+                                    <img src="./assets/media/privateIcon.png" alt="Private icon" data-identifier="visibility">
+                                    Reservadamente
+                                </div>
+                            </li>
+                        </ul>
+                    </nav>
             </div>
         </div>
     </body>
