@@ -47,7 +47,12 @@
                     </h2>
                     <nav class="options contacts">
                         <ul>
-                            
+                            <li class="flex space-between check" onclick="changeContact(this)">
+                                <div class="option flex flex-start">
+                                    <img src="./assets/media/smallPeopleIcon.png" alt="">
+                                    <span>Todos</span>
+                                </div>
+                            </li>
                         </ul>
                     </nav>
                     <h2 class="title-visibility flex">
@@ -55,19 +60,19 @@
                     </h2>
                     <nav class="options visibility">
                         <ul>
-                            <li class="flex space-between check" onclick="changeVisibility(this)">
-                                <div class="option">
+                            <li class="flex space-between" onclick="changeVisibility(this)">
+                                <div class="option flex flex-start">
                                     <img src="./assets/media/publicIcon.png" alt="Public icon" data-identifier="visibility">
-                                    Público
+                                    <span>Público</span> 
                                 </div>
                                 <div>
                                     <img class="check" src="./assets/media/checkIcon.png" alt="Check icon">
                                 </div>
                             </li>
                             <li class="flex space-between" onclick="changeVisibility(this)">
-                                <div class="option">
+                                <div class="option flex flex-start">
                                     <img src="./assets/media/privateIcon.png" alt="Private icon" data-identifier="visibility">
-                                    Reservadamente
+                                    <span>Reservadamente</span> 
                                 </div>
                             </li>
                         </ul>

@@ -8,9 +8,9 @@ let transparentScreen = document.querySelector(".transparent-dark")
 let menu = document.querySelector(".menu")
 
 let contacts = document.querySelector(".contacts ul")
-let selectedContact;
-console.log(selectedContact)
-let seletedVisibility = document.querySelector(".visibility .check")
+let selectedContact = document.querySelector(".contacts ul").children[0];
+let seletedVisibility = document.querySelector(".visibility ul").children[0];
+let public = seletedVisibility;
 
 let chat = document.querySelector(".chat")
 let username = ""
@@ -18,23 +18,27 @@ let messageText = ""
 
 let entered = false;
 
+let nameContactSelected = "Todos"
+let nameVisibilitySelected = "message"
+
 
 function treatMessageFail(answer){
     window.location.reload()
 }
 function sendMessage(){
-    console.log(document.querySelector(".input-text"))
     messageText = document.querySelector(".input-text").value
+    document.querySelector(".input-text").value = "";
     let message = {
         from: username,
-        to: "Todos",
+        to: nameContactSelected,
         text: messageText,
-        type: "message"
+        type: nameVisibilitySelected
     }
    const promess = axios.post("https://mock-api.driven.com.br/api/v4/uol/messages", message)
    promess.catch(treatMessageFail)
 }
 function treatMessagesSucess(answer){
+    chatBackground.style.height = "auto"
     let messages = answer.data;
     let chatMessages = "";
 
@@ -74,29 +78,62 @@ function treatMessagesSucess(answer){
     }
 }
 function treatSearchSucess(answer){
+    let less1 = 0;
+    let flag = false;
+    let keepSelected;
     let participants = answer.data;
+    contacts.innerHTML = "";
     let contactsOnline = `
-    <li class="flex space-between check" onclick="changeContact(this)">
-        <div class="option">
-            <img src="./assets/media/smallPeopleIcon.png" alt="">
-            Todos
-        </div>
-        <div>
-            <img src="./assets/media/checkIcon.png" alt="Check icon">
+    <li class="flex space-between" onclick="changeContact(this)">
+        <div class="option flex flex-start">
+            <img class="flex" src="./assets/media/smallPeopleIcon.png" alt="">
+            <span class="flex align-normal">Todos</span>
         </div>
     </li>
     `
     for(let i = 0; i < participants.length; i++){
-        contactsOnline += `
-        <li class="flex space-between" onclick="changeContact(this)">
-            <div class="option">
-                <img src="./assets/media/userIcon.png" alt="User icon" data-identifier="participant">
-                ${participants[i].name}
-            </div>
-        </li>`
+        if(participants[i].name !== username){
+            if (participants[i].name === nameContactSelected){
+                flag = true;
+                keepSelected = i + 1 - less1;
+                contactsOnline +=`
+                <li class="flex space-between" onclick="changeContact(this)">
+                    <div class="option flex flex-start">
+                        <img class="flex" src="./assets/media/userIcon.png" alt="User icon" data-identifier="participant">
+                        <span class="flex align-normal">${participants[i].name}</span>
+                    </div>
+                    <div>
+                        <img src="./assets/media/checkIcon.png" alt="Check icon">
+                    </div>
+                </li>
+                 `
+            }else{  
+                contactsOnline += `
+                <li class="flex space-between" onclick="changeContact(this)">
+                    <div class="option flex flex-start">
+                        <img class="flex" src="./assets/media/userIcon.png" alt="User icon" data-identifier="participant">
+                        <span class="flex align-normal">${participants[i].name}</span>
+                    </div>
+                </li>
+                `
+            }
+        }else less1 = 1;
     }
-    contacts.innerHTML += contactsOnline;
-    selectedContact = document.querySelector(".contacts .check")
+    contacts.innerHTML = contactsOnline;
+    console.log(keepSelected)
+    if(keepSelected) selectedContact = contacts.children[keepSelected]
+    if(!flag){
+        nameContactSelected = "Todos"
+        selectedContact = contacts.children[0]
+        selectedContact.innerHTML += `
+        <div>
+            <img src="./assets/media/checkIcon.png" alt="Check icon">
+        </div>
+        `
+        changeVisibility(public)
+    }
+    console.log(nameContactSelected)
+    console.log(selectedContact)
 }
 function searchParticipants(){
     const promess = axios.get("https://mock-api.driven.com.br/api/v4/uol/participants")
@@ -107,7 +144,7 @@ function treatSucess(answer){
     const promess = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages")
     promess.then(treatMessagesSucess)
     
-    setInterval(function(){
+   setInterval(function(){
         const promess = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages")
         promess.then(treatMessagesSucess)
     }, 3000)
@@ -133,16 +170,21 @@ function enter(){
 function entrou(){
     inputScreen.classList.add("none")
     mainScreen.classList.remove("none")
-
 }
 function toggleMenu(){
     menu.classList.toggle("none")
     transparentScreen.classList.toggle("none")
 }
 function changeContact(selected){
+    
     selectedContact.children[1].remove();
     selectedContact = selected
     console.log(selectedContact)
+    nameContactSelected = selectedContact.querySelector("span").innerHTML
+
+    if(nameContactSelected === "Todos" && nameVisibilitySelected === "private_message"){
+        changeVisibility(public)
+    }
 
     selectedContact.innerHTML += `
     <div>
@@ -151,10 +193,16 @@ function changeContact(selected){
     `
 }
 function changeVisibility(selected){
+    if(nameContactSelected === "Todos" && selected.querySelector("span").innerHTML === "Reservadamente") return
     seletedVisibility.children[1].remove();
     seletedVisibility = selected
+    let visibilities = document.querySelectorAll(".visibility ul li")
+    console.log(visibilities)
+
+    if(seletedVisibility == visibilities[0]) nameVisibilitySelected = "message"
+    else nameVisibilitySelected = "private_message"
+    console.log(nameVisibilitySelected)
     
-    console.log(seletedVisibility)
     seletedVisibility.innerHTML += `
     <div>
         <img src="./assets/media/checkIcon.png" alt="Check icon">

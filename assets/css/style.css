@@ -4,7 +4,6 @@
     box-sizing: border-box;
 }
 body{
-    width: 375px;
     margin: 0 auto;
 
     font-family: 'Roboto', sans-serif;
@@ -94,13 +93,12 @@ header{
 header img{
     cursor: pointer;
 }
-.content{
+main {
     background-color: #F3F3F3;
     padding: 106px 0 80px;
-}
-main {
   
     width: 375px;
+    height: 100vh;
     overflow-y: scroll;
   
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
@@ -188,6 +186,8 @@ main {
 
     background: #fff;
 
+    overflow-y: scroll;
+
     width: 260px;
     height: 100vh;
 }
@@ -214,6 +214,11 @@ main {
 .options li img{
     padding: 0 10px 0 20px;
 }
+.option {
+    height: 36px;
+    overflow: hidden;
+    display: flex;
+}
 .show-menu{
     transform: translateX(-260px);
 }
@@ -234,6 +239,9 @@ input:focus::-webkit-input-placeholder{
 }
 .flex-start{
     justify-content: flex-start;
+}
+.align-normal{
+    align-items: flex-start;
 }
 .none{
     display: none;
