@@ -5,6 +5,7 @@
 }
 body{
     margin: 0 auto;
+    width: 375px;
 
     font-family: 'Roboto', sans-serif;
 }

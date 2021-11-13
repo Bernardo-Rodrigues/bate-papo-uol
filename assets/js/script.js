@@ -15,6 +15,7 @@ let public = seletedVisibility;
 let chat = document.querySelector(".chat")
 let username = ""
 let messageText = ""
+let lastMessage = "";
 
 let entered = false;
 
@@ -41,41 +42,44 @@ function treatMessagesSucess(answer){
     chatBackground.style.height = "auto"
     let messages = answer.data;
     let chatMessages = "";
+    let last;
 
     for(let i = 0; i < messages.length; i++){
+        if(i === messages.length-1) last = "last";
         switch(messages[i].type){
             case "status":
                 chatMessages += `
-                <div class="item status">
+                <div class="item status ${last}">
                     <p class="message-text" data-identifier="message"><span>(${messages[i].time})</span><b>${messages[i].from}</b> ${messages[i].text}...</p>
                 </div>
                 `
                 break;
             case "message":
                 chatMessages += `
-                <div class="item message">
+                <div class="item message ${last}">
                     <p class="message-text" data-identifier="message"><span>(${messages[i].time})</span><b>${messages[i].from}</b> para <b>${messages[i].to}</b>:  ${messages[i].text}</p>
                 </div>
                 `
                 break;
             case "private_message":
-                //if(messages[i].to !== username) break
+                if(messages[i].from !== username && messages[i].to !== username) break
                 chatMessages += `
-                <div class="item private_message">
+                <div class="item private_message ${last}">
                     <p class="message-text" data-identifier="message"><span>(${messages[i].time})</span><b>${messages[i].from}</b> reservadamente para <b>${messages[i].to}</b>:  ${messages[i].text}</p>
                 </div>
                 `
-                
                 break;
         }
     }
     chat.innerHTML = chatMessages
     chatBackground.classList.add("main-color")
-    if(!entered){
-        let ultima = chat.children[99];
+    
+    let ultima = document.querySelector(".last");
+    let currentLastMessage = ultima.querySelector("p").innerHTML;
+    if(currentLastMessage !== lastMessage){
+        lastMessage = currentLastMessage
         ultima.scrollIntoView();
-        entered = true;
-    }
+    } 
 }
 function treatSearchSucess(answer){
     let less1 = 0;
@@ -120,7 +124,6 @@ function treatSearchSucess(answer){
         }else less1 = 1;
     }
     contacts.innerHTML = contactsOnline;
-    console.log(keepSelected)
     if(keepSelected) selectedContact = contacts.children[keepSelected]
     if(!flag){
         nameContactSelected = "Todos"
@@ -132,8 +135,6 @@ function treatSearchSucess(answer){
         `
         changeVisibility(public)
     }
-    console.log(nameContactSelected)
-    console.log(selectedContact)
 }
 function searchParticipants(){
     const promess = axios.get("https://mock-api.driven.com.br/api/v4/uol/participants")
@@ -179,7 +180,6 @@ function changeContact(selected){
     
     selectedContact.children[1].remove();
     selectedContact = selected
-    console.log(selectedContact)
     nameContactSelected = selectedContact.querySelector("span").innerHTML
 
     if(nameContactSelected === "Todos" && nameVisibilitySelected === "private_message"){
@@ -197,15 +197,19 @@ function changeVisibility(selected){
     seletedVisibility.children[1].remove();
     seletedVisibility = selected
     let visibilities = document.querySelectorAll(".visibility ul li")
-    console.log(visibilities)
 
     if(seletedVisibility == visibilities[0]) nameVisibilitySelected = "message"
     else nameVisibilitySelected = "private_message"
-    console.log(nameVisibilitySelected)
     
     seletedVisibility.innerHTML += `
     <div>
         <img src="./assets/media/checkIcon.png" alt="Check icon">
     </div>
     `
+}
+function pressEnterUser(event){
+    if(event.keyCode === 13) enter()
+}
+function pressEnterChat(event){
+    if(event.keyCode === 13) sendMessage()
 }
