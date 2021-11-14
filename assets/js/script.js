@@ -1,45 +1,149 @@
 let inputScreen = document.querySelector(".input-screen")
-let inputLogin = document.querySelector(".input-login")
-let loadingAnimation = document.querySelector(".loading")
-
-let chatBackground = document.querySelector("main")
-let mainScreen = document.querySelector(".main-screen")
-let transparentScreen = document.querySelector(".transparent-dark")
-let menu = document.querySelector(".menu")
-
-let contacts = document.querySelector(".contacts ul")
+let inputMessage = document.querySelector(".input-message")
 let selectedContact = document.querySelector(".contacts ul").children[0];
 let seletedVisibility = document.querySelector(".visibility ul").children[0];
-let public = seletedVisibility;
 
-let chat = document.querySelector(".chat")
+let public = seletedVisibility;
 let username = ""
 let messageText = ""
-let lastMessage = "";
-
-let entered = false;
-
 let nameContactSelected = "Todos"
 let nameVisibilitySelected = "message"
+let visibilitySelected = "Público";
+let lastMessage = "";
 
+const inputLogin = document.querySelector(".input-login")
+    const loadingAnimation = document.querySelector(".loading")
 
-function treatMessageFail(answer){
-    window.location.reload()
+function pressEnterUser(event){
+    if(event.keyCode === 13) login()
 }
-function sendMessage(){
-    messageText = document.querySelector(".input-text").value
-    document.querySelector(".input-text").value = "";
-    let message = {
-        from: username,
-        to: nameContactSelected,
-        text: messageText,
-        type: nameVisibilitySelected
+function pressEnterChat(event){
+    if(event.keyCode === 13) sendMessage()
+}
+function sendTo(){
+    let visibilitySelected;
+    if(inputMessage.children.length > 1) inputMessage.children[1].remove()
+    
+    if(nameVisibilitySelected === "message") visibilitySelected = "Público"
+    else visibilitySelected = "Reservadamente"
+
+    inputMessage.innerHTML += `
+    <div class="send-to">
+        <p>Enviando para ${nameContactSelected} (${visibilitySelected})</p>
+    </div>
+    `
+}
+function login(){
+    username = document.querySelector(".username").value
+
+    const promess = axios.post("https://mock-api.driven.com.br/api/v4/uol/participants", { name: username })
+    promess.then(enterRoomSucess, enterRoomFail)
+
+    searchParticipants()
+    setInterval(searchParticipants, 10000)
+
+    inputLogin.classList.add("none")
+    loadingAnimation.classList.remove("none")
+    loadingAnimation.classList.add("flex", "column")
+}
+function enterRoomSucess(){
+    const mainScreen = document.querySelector(".main-screen")
+    sendTo()
+
+    let promess = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages")
+    inputScreen.classList.add("none")
+    mainScreen.classList.remove("none")
+
+    promess.then(messagesSucess)
+    
+   setInterval(function(){
+        promess = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages")
+        promess.then(messagesSucess)
+    }, 3000)
+    setInterval(function(){
+        axios.post("https://mock-api.driven.com.br/api/v4/uol/status", { name: username })
+    }, 5000)
+}
+function enterRoomFail(){
+    inputLogin.classList.remove("none")
+    loadingAnimation.classList.add("none")
+    loadingAnimation.classList.remove("flex", "column")
+    document.querySelector(".username").value = "";
+
+    if(inputScreen.children.length > 3) return
+    inputScreen.innerHTML += "<p>Esse nome já está em uso</p>"
+}
+    
+function searchParticipants(){
+    const promess = axios.get("https://mock-api.driven.com.br/api/v4/uol/participants")
+    promess.then(treatSearchSucess)
+}
+function treatSearchSucess(answer){
+    const contactsList = document.querySelector(".contacts ul")
+    let countUser = 0;
+    let keep = false;
+    let keepSelected;
+    let participants = answer.data;
+    let contactsOnline = `
+    <li class="flex space-between" onclick="changeContact(this)">
+        <div class="option flex flex-start">
+            <img class="flex" src="./assets/media/smallPeopleIcon.png" alt="">
+            <span class="flex align-normal">Todos</span>
+        </div>
+    </li>
+    `
+
+    contactsList.innerHTML = "";
+    
+    for(let i = 0; i < participants.length; i++){
+        if(participants[i].name !== username){
+            if (participants[i].name === nameContactSelected){
+                keep = true;
+                keepSelected = i + 1 - countUser;
+                contactsOnline +=`
+                <li class="flex space-between" onclick="changeContact(this)" data-identifier="participant">
+                    <div class="option flex flex-start">
+                        <img class="flex" src="./assets/media/userIcon.png" alt="User icon">
+                        <span class="flex align-normal">${participants[i].name}</span>
+                    </div>
+                    <div>
+                        <img src="./assets/media/checkIcon.png" alt="Check icon">
+                    </div>
+                </li>
+                 `
+            }else{  
+                contactsOnline += `
+                <li class="flex space-between" onclick="changeContact(this)" data-identifier="participant">
+                    <div class="option flex flex-start">
+                        <img class="flex" src="./assets/media/userIcon.png" alt="User icon">
+                        <span class="flex align-normal">${participants[i].name}</span>
+                    </div>
+                </li>
+                `
+            }
+        }else countUser = 1;
     }
-   const promess = axios.post("https://mock-api.driven.com.br/api/v4/uol/messages", message)
-   promess.catch(treatMessageFail)
+    contactsList.innerHTML = contactsOnline;
+
+    if(keepSelected) selectedContact = contactsList.children[keepSelected]
+
+    if(!keep){
+        nameContactSelected = "Todos"
+        selectedContact = contactsList.children[0]
+        selectedContact.innerHTML += `
+        <div>
+            <img src="./assets/media/checkIcon.png" alt="Check icon">
+        </div>
+        `
+        changeVisibility(public)
+    }
 }
-function treatMessagesSucess(answer){
+function messagesSucess(answer){
+    const chatBackground = document.querySelector("main")
+    const chat = document.querySelector(".chat")
+
     chatBackground.style.height = "auto"
+
     let messages = answer.data;
     let chatMessages = "";
     let last;
@@ -62,7 +166,12 @@ function treatMessagesSucess(answer){
                 `
                 break;
             case "private_message":
-                if(messages[i].from !== username && messages[i].to !== username) break
+                if(messages[i].from !== username && messages[i].to !== username){
+                    console.log(username)
+                    console.log(messages[i].from)
+                    console.log(messages[i].to)
+                    break
+                } 
                 chatMessages += `
                 <div class="item private_message ${last}">
                     <p class="message-text" data-identifier="message"><span>(${messages[i].time})</span><b>${messages[i].from}</b> reservadamente para <b>${messages[i].to}</b>:  ${messages[i].text}</p>
@@ -72,112 +181,42 @@ function treatMessagesSucess(answer){
         }
     }
     chat.innerHTML = chatMessages
-    chatBackground.classList.add("main-color")
-    
-    let ultima = document.querySelector(".last");
-    let currentLastMessage = ultima.querySelector("p").innerHTML;
-    if(currentLastMessage !== lastMessage){
-        lastMessage = currentLastMessage
-        ultima.scrollIntoView();
+
+    const currentLastMessage = document.querySelector(".last");
+    const currentLastText = currentLastMessage.querySelector("p").innerHTML;
+    if(currentLastText !== lastMessage){
+        lastMessage = currentLastText
+        currentLastMessage.scrollIntoView();
     } 
 }
-function treatSearchSucess(answer){
-    let less1 = 0;
-    let flag = false;
-    let keepSelected;
-    let participants = answer.data;
-    contacts.innerHTML = "";
-    let contactsOnline = `
-    <li class="flex space-between" onclick="changeContact(this)">
-        <div class="option flex flex-start">
-            <img class="flex" src="./assets/media/smallPeopleIcon.png" alt="">
-            <span class="flex align-normal">Todos</span>
-        </div>
-    </li>
-    `
-    for(let i = 0; i < participants.length; i++){
-        if(participants[i].name !== username){
-            if (participants[i].name === nameContactSelected){
-                flag = true;
-                keepSelected = i + 1 - less1;
-                contactsOnline +=`
-                <li class="flex space-between" onclick="changeContact(this)">
-                    <div class="option flex flex-start">
-                        <img class="flex" src="./assets/media/userIcon.png" alt="User icon" data-identifier="participant">
-                        <span class="flex align-normal">${participants[i].name}</span>
-                    </div>
-                    <div>
-                        <img src="./assets/media/checkIcon.png" alt="Check icon">
-                    </div>
-                </li>
-                 `
-            }else{  
-                contactsOnline += `
-                <li class="flex space-between" onclick="changeContact(this)">
-                    <div class="option flex flex-start">
-                        <img class="flex" src="./assets/media/userIcon.png" alt="User icon" data-identifier="participant">
-                        <span class="flex align-normal">${participants[i].name}</span>
-                    </div>
-                </li>
-                `
-            }
-        }else less1 = 1;
+function sendMessage(){
+    messageText = document.querySelector(".input-text").value
+    document.querySelector(".input-text").value = "";
+
+    let message = {
+        from: username,
+        to: nameContactSelected,
+        text: messageText,
+        type: nameVisibilitySelected
     }
-    contacts.innerHTML = contactsOnline;
-    if(keepSelected) selectedContact = contacts.children[keepSelected]
-    if(!flag){
-        nameContactSelected = "Todos"
-        selectedContact = contacts.children[0]
-        selectedContact.innerHTML += `
-        <div>
-            <img src="./assets/media/checkIcon.png" alt="Check icon">
-        </div>
-        `
-        changeVisibility(public)
-    }
+   const promess = axios.post("https://mock-api.driven.com.br/api/v4/uol/messages", message)
+   promess.then(sendMessageSucess, sendMessageFail)
 }
-function searchParticipants(){
-    const promess = axios.get("https://mock-api.driven.com.br/api/v4/uol/participants")
-    promess.then(treatSearchSucess)
-}
-function treatSucess(answer){
-    entrou()
+function sendMessageSucess(){
     const promess = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages")
-    promess.then(treatMessagesSucess)
-    
-   setInterval(function(){
-        const promess = axios.get("https://mock-api.driven.com.br/api/v4/uol/messages")
-        promess.then(treatMessagesSucess)
-    }, 3000)
-    setInterval(function(){
-        axios.post("https://mock-api.driven.com.br/api/v4/uol/status", { name: username })
-    }, 5000)
+    promess.then(messagesSucess)
 }
-function treatFail(answer){
+function sendMessageFail(){
     window.location.reload()
 }
-function enter(){
-    username = document.querySelector(".username").value
-    searchParticipants()
-    setInterval(searchParticipants, 10000)
-
-    const promess = axios.post("https://mock-api.driven.com.br/api/v4/uol/participants", { name: username })
-    promess.then(treatSucess, treatFail)
-
-    inputLogin.classList.add("none")
-    loadingAnimation.classList.remove("none")
-    loadingAnimation.classList.add("flex", "column")
-}
-function entrou(){
-    inputScreen.classList.add("none")
-    mainScreen.classList.remove("none")
-}
 function toggleMenu(){
+    const menu = document.querySelector(".menu")
+    const transparentScreen = document.querySelector(".transparent-dark")
+    
     menu.classList.toggle("none")
     transparentScreen.classList.toggle("none")
 }
 function changeContact(selected){
-    
     selectedContact.children[1].remove();
     selectedContact = selected
     nameContactSelected = selectedContact.querySelector("span").innerHTML
@@ -191,12 +230,15 @@ function changeContact(selected){
         <img src="./assets/media/checkIcon.png" alt="Check icon">
     </div>
     `
+    sendTo()
 }
 function changeVisibility(selected){
     if(nameContactSelected === "Todos" && selected.querySelector("span").innerHTML === "Reservadamente") return
+
     seletedVisibility.children[1].remove();
     seletedVisibility = selected
-    let visibilities = document.querySelectorAll(".visibility ul li")
+
+    const visibilities = document.querySelectorAll(".visibility ul li")
 
     if(seletedVisibility == visibilities[0]) nameVisibilitySelected = "message"
     else nameVisibilitySelected = "private_message"
@@ -206,10 +248,5 @@ function changeVisibility(selected){
         <img src="./assets/media/checkIcon.png" alt="Check icon">
     </div>
     `
-}
-function pressEnterUser(event){
-    if(event.keyCode === 13) enter()
-}
-function pressEnterChat(event){
-    if(event.keyCode === 13) sendMessage()
+    sendTo()
 }
