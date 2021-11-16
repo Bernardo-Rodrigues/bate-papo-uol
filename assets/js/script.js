@@ -146,7 +146,7 @@ function messagesSucess(answer){
 
     let messages = answer.data;
     let chatMessages = "";
-    let last;
+    let last = "";
 
     for(let i = 0; i < messages.length; i++){
         if(i === messages.length-1) last = "last";
@@ -166,12 +166,7 @@ function messagesSucess(answer){
                 `
                 break;
             case "private_message":
-                if(messages[i].from !== username && messages[i].to !== username){
-                    console.log(username)
-                    console.log(messages[i].from)
-                    console.log(messages[i].to)
-                    break
-                } 
+                if(messages[i].from !== username && messages[i].to !== username) break
                 chatMessages += `
                 <div class="item private_message ${last}">
                     <p class="message-text" data-identifier="message"><span>(${messages[i].time})</span><b>${messages[i].from}</b> reservadamente para <b>${messages[i].to}</b>:  ${messages[i].text}</p>
