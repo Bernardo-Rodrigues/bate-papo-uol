@@ -153,23 +153,23 @@ function messagesSucess(answer){
         switch(messages[i].type){
             case "status":
                 chatMessages += `
-                <div class="item status ${last}">
-                    <p class="message-text" data-identifier="message"><span>(${messages[i].time})</span><b>${messages[i].from}</b> ${messages[i].text}...</p>
+                <div class="item status ${last}" data-identifier="message">
+                    <p class="message-text"><span>(${messages[i].time})</span><b>${messages[i].from}</b> ${messages[i].text}...</p>
                 </div>
                 `
                 break;
             case "message":
                 chatMessages += `
-                <div class="item message ${last}">
-                    <p class="message-text" data-identifier="message"><span>(${messages[i].time})</span><b>${messages[i].from}</b> para <b>${messages[i].to}</b>:  ${messages[i].text}</p>
+                <div class="item message ${last}" data-identifier="message">
+                    <p class="message-text"><span>(${messages[i].time})</span><b>${messages[i].from}</b> para <b>${messages[i].to}</b>:  ${messages[i].text}</p>
                 </div>
                 `
                 break;
             case "private_message":
                 if(messages[i].from !== username && messages[i].to !== username) break
                 chatMessages += `
-                <div class="item private_message ${last}">
-                    <p class="message-text" data-identifier="message"><span>(${messages[i].time})</span><b>${messages[i].from}</b> reservadamente para <b>${messages[i].to}</b>:  ${messages[i].text}</p>
+                <div class="item private_message ${last}" data-identifier="message">
+                    <p class="message-text"><span>(${messages[i].time})</span><b>${messages[i].from}</b> reservadamente para <b>${messages[i].to}</b>:  ${messages[i].text}</p>
                 </div>
                 `
                 break;
